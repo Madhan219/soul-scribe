@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import 'screens/home_screen.dart';
+import 'screens/mood_picker.dart';
+import 'screens/journal_screen.dart';
+import 'screens/chat_screen.dart';
+import 'screens/history_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,13 +51,40 @@ class SoulScribeApp extends StatelessWidget {
         brightness: Brightness.light,
         primarySwatch: Colors.indigo,
         fontFamily: 'Nunito',
-        scaffoldBackgroundColor: Colors.grey[100],
       ),
       darkTheme: ThemeData.dark(),
-      home: Scaffold(
-        appBar: AppBar(title: Text('Soul Scribe')),
-        body: Center(child: Text('Welcome to Soul Scribe!')),
-      ),
+      home: MainRouter(),
+    );
+  }
+}
+
+class MainRouter extends StatefulWidget {
+  @override
+  State<MainRouter> createState() => _MainRouterState();
+}
+
+class _MainRouterState extends State<MainRouter> {
+  @override
+  Widget build(BuildContext context) {
+    return HomeScreen(
+      onMoodTap: () async {
+        final mood = await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => MoodPickerScreen()),
+        );
+        if (mood != null) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('You selected: $mood')));
+        }
+      },
+      onJournalTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => JournalScreen()));
+      },
+      onChatTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => ChatScreen()));
+      },
+      onHistoryTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => HistoryScreen()));
+      },
     );
   }
 }
