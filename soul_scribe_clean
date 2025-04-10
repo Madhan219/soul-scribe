@@ -1,0 +1,10 @@
+.DS_Store
+.idea/
+.packages
+.pub-cache/
+.flutter-plugins
+.flutter-plugins-dependencies
+.melos_tool/
+build/
+dart_tool/
+.env
